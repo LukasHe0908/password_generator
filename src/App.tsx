@@ -37,7 +37,10 @@ export default function App() {
   useEffect(() => {
     try {
       let config: any = localStorage.getItem('password_generator');
-      if (!config) return;
+      if (!config) {
+        setCharacterSetFinished(true);
+        return;
+      }
       config = JSON.parse(config);
       if (config.quantity) {
         setQuantity(parseInt(config.quantity));
