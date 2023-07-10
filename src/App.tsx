@@ -95,6 +95,18 @@ export default function App() {
     storeConfig('quickCopy', quickCopy);
   }, [quickCopy]);
 
+  function generate() {
+    let max = lengthMax;
+    if (singleLength) max = lengthMin;
+    let text = '';
+    for (let i = 1; i <= quantity; i++) {
+      text += generateOne(characterSet, lengthMin, max);
+      if (i < quantity) text += '\n';
+    }
+    // console.log(text);
+    setResult(text);
+  }
+
   return (
     <Container
       style={{
@@ -140,21 +152,10 @@ export default function App() {
             use={characterSet}
             set={setCharacterSet}
             finished={characterSetFinished}
+            runOK={generate}
           ></FunctionCharacterSet>
           <Divider />
-          <FunctionGenerate
-            onClick={() => {
-              let max = lengthMax;
-              if (singleLength) max = lengthMin;
-              let text = '';
-              for (let i = 1; i <= quantity; i++) {
-                text += generateOne(characterSet, lengthMin, max);
-                if (i < quantity) text += '\n';
-              }
-              // console.log(text);
-              setResult(text);
-            }}
-          ></FunctionGenerate>
+          <FunctionGenerate onClick={generate}></FunctionGenerate>
           <Divider />
           <FunctionResult
             use={result}
@@ -370,6 +371,7 @@ function FunctionCharacterSet(props: any) {
       setString(props.use);
       replaceCheckbox(props.use);
     }
+    props.runOK();
   }, [props.finished]);
   function replaceInput(
     checkedNumber: boolean,
