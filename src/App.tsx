@@ -31,7 +31,7 @@ export default function App() {
   const [lengthMax, setLengthMax] = useState(20);
   const [characterSet, setCharacterSet] = useState('');
   const [characterSetFinished, setCharacterSetFinished] = useState(false);
-  const [quickCopy, setQuickCopy] = useState(false);
+  const [quickCopy, setQuickCopy] = useState(true);
   const [result, setResult] = useState('');
 
   useEffect(() => {
@@ -95,12 +95,18 @@ export default function App() {
     storeConfig('quickCopy', quickCopy);
   }, [quickCopy]);
 
-  function generate() {
+  function generate(custom_characterSet: string) {
+    let characterSet_t;
+    if (custom_characterSet) {
+      characterSet_t = custom_characterSet;
+    } else {
+      characterSet_t = characterSet;
+    }
     let max = lengthMax;
     if (singleLength) max = lengthMin;
     let text = '';
     for (let i = 1; i <= quantity; i++) {
-      text += generateOne(characterSet, lengthMin, max);
+      text += generateOne(characterSet_t, lengthMin, max);
       if (i < quantity) text += '\n';
     }
     // console.log(text);
@@ -365,19 +371,24 @@ function FunctionCharacterSet(props: any) {
         checkedNumber,
         checkedLowerCaseLetter,
         checkedUpperCaseLetter,
-        checkedSpecialSymbol
+        checkedSpecialSymbol,
+        (tempString: string) => {
+          props.runOK(tempString);
+        }
       );
     } else {
       setString(props.use);
       replaceCheckbox(props.use);
+      props.runOK();
     }
-    props.runOK();
   }, [props.finished]);
+
   function replaceInput(
     checkedNumber: boolean,
     checkedLowerCaseLetter: boolean,
     checkedUpperCaseLetter: boolean,
-    checkedSpecialSymbol: boolean
+    checkedSpecialSymbol: boolean,
+    callback: any = () => {}
   ) {
     let tempString = '';
     if (checkedNumber) tempString += props.characterSetOfThePassword.number;
@@ -389,6 +400,7 @@ function FunctionCharacterSet(props: any) {
       tempString += props.characterSetOfThePassword.specialSymbol;
     setString(tempString);
     props.set(tempString);
+    callback(tempString);
   }
   function replaceCheckbox(string: any) {
     if (string.includes(props.characterSetOfThePassword.number)) {
