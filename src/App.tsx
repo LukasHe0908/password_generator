@@ -95,7 +95,7 @@ export default function App() {
     storeConfig('quickCopy', quickCopy);
   }, [quickCopy]);
 
-  function generate(custom_characterSet: string) {
+  function generate(custom_characterSet?: string) {
     let characterSet_t;
     if (custom_characterSet) {
       characterSet_t = custom_characterSet;
@@ -161,7 +161,7 @@ export default function App() {
             runOK={generate}
           ></FunctionCharacterSet>
           <Divider />
-          <FunctionGenerate onClick={generate}></FunctionGenerate>
+          <FunctionGenerate onClick={() => generate()}></FunctionGenerate>
           <Divider />
           <FunctionResult
             use={result}
