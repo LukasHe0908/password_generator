@@ -380,7 +380,7 @@ function FunctionCharacterSet(props: any) {
       replaceCheckbox(props.use);
       props.runOK();
     }
-  }, [props.finished,props]);
+  }, [props.finished]);
 
   function replaceInput(
     checkedNumber: boolean,
